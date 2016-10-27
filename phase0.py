@@ -39,7 +39,7 @@ def attack(url):
 	content_to_load = ""
 	head =""
 	while '\r\n\r\n' not in head:
-		buf = attack_socket.recv(1)
+		buf = attack_socket.recv(1024)
 		head += buf
 	attack_socket.close()
 	return head
@@ -69,7 +69,7 @@ def concurrent(url, numreq, maxConcurrent):
 	print "Avg requests per second: ", (len(statistics))/totaltime," [req/s]"
 
 
-concurrent("http://10.27.8.20:8080/",100000,50000)
+concurrent("http://10.27.8.20:8080/",10000,200)
 
 
 # #number of requests to be made:
