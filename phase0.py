@@ -41,9 +41,35 @@ def attack(url):
 	while '\r\n\r\n' not in head:
 		buf = attack_socket.recv(1)
 		head += buf
+	attack_socket.close()
 	return head
 
-print attack("http://10.27.8.20:8080/primes11.txt")
+def concurrent(url, numreq, maxConcurrent):
+	#Keep account of how many requests have been done
+	donerequests = 0
+	#Tracker for attack number
+	count=1
+	#Stores attack number and the time taken for that attack.
+	statistics = dict()
+	while donerequests < numreq:
+		for i in range(maxConcurrent):
+			start = time.time()
+			#print "Attack number: ", count
+			attack(url)
+			end = time.time()
+			#print "time taken is: ", (end-start)
+			statistics[str(count)] = (end-start)
+			count+=1
+		donerequests += maxConcurrent
+	#print statistics
+	totaltime = sum(statistics.values())
+	print "Time taken for tests: ", totaltime," seconds" 
+	print "Completed requests: ", len(statistics)
+	print "Failed requests: ", int(count-1) - len(statistics)
+	print "Avg requests per second: ", (len(statistics))/totaltime," [req/s]"
+
+
+concurrent("http://10.27.8.20:8080/",100000,50000)
 
 
 # #number of requests to be made:
