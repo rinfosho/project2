@@ -27,34 +27,64 @@ def getreq(url):
     return ("GET " + "{p} HTTP/1.1" + NL + "Host: {h}" + NL + "P2Tag: {t}" + NL + NL).format(p=path,h=host,t=P2tag)
 
 def attack(url, numreq, maxCon):
+    fail_count=0
     #Retrieve the http_request from the function that makes it
     http_request = getreq(url)
     #get host and port (Necessary for making the connection)
     host, path, port = parse_url(url)
     #open socket, connect to host and port and then sent the request
     attack_socket = skt.socket(skt.AF_INET, skt.SOCK_STREAM)
-    attack_socket.connect((host,port))
-    times = numreq/maxCon
-    start = time.time()
-    numcounter = 0
-    for i in range(times):
-        start = time.time()
-        for j in range(maxCon):
-            print "sending how many times", j
-            attack_socket.send(http_request)
-            numcounter +=1
-    end = time.time()
-    print end-start
+    attack_socket.settimeout(0.1)
+    try:
+        attack_socket.connect((host,port))
+    except skt.error,e:
+        fail_count+=1
+        pass
+    except skt.timeout:
+        fail_count += 1
+        pass
 
-    content_to_load = ""
-    head =""
-    while '\r\n\r\n' not in head:
-        buf = attack_socket.recv(1024)
-        head += buf
-    return head, numcounter
+    times = float(numreq)/maxCon
+    start = time.time()
+    pass_counter = 0
+    tottime=0
+    for i in range(int(times)):
+        for j in range(maxCon):
+            start=time.time()
+            try:
+                attack_socket.send(http_request)
+                pass_counter +=1
+            except skt.error, e:
+                fail_count +=1
+                continue
+            except skt.timeout:
+                fail_count += 1
+                continue
+            end = time.time()
+            tottime += (end-start)
+    if (pass_counter + fail_count) != numreq:
+        for k in range((numreq-(pass_counter + fail_count))):
+            start=time.time()
+            try:
+                attack_socket.send(http_request)
+                pass_counter +=1
+            except skt.error, e:
+                fail_count +=1
+                continue
+            except skt.timeout:
+                fail_count += 1
+                continue
+            end = time.time()
+            tottime += end-start
+    attack_socket.close()
+    # return pass_counter, fail_count, tottime
+    print "Time taken for tests: ", tottime," seconds" 
+    print "Completed requests: ", pass_counter
+    print "Failed requests: ", fail_count
+    print "Avg requests per second: ", numreq/tottime," [req/s]"
 
 url = "http://10.27.8.20:8080/"
-numreq = 10000
-maxCon = 2000
-print attack(url,numreq,maxCon)
+numreq = 500000
+maxCon = 50000
+attack(url,numreq,maxCon)
 
