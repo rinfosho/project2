@@ -85,16 +85,22 @@ def attack(url, numreq, maxCon):
             end = time.time()
             tottime += end-start
 
+    content_to_load = ""
+    head =""
+    while '\r\n\r\n' not in head:
+        buf = attack_socket.recv(1024)
+        head += buf
+    header_data = head.split("\r\n\r\n")[0]
     attack_socket.close()
     # return pass_counter, fail_count, tottime
-    print "Replies from the server: ", head
+    print "Replies from the server: ", header_data
     print "Time taken for tests: ", tottime," seconds" 
     print "Completed requests: ", pass_counter
     print "Failed requests: ", fail_count
     print "Avg requests per second: ", float(numreq)/tottime," [req/s]"
 
-url = "http://10.27.8.20:2201/"
-numreq = 10
-maxCon = 2
+url = "http://10.27.8.20:8080/"
+numreq = 100000
+maxCon = 20000
 attack(url,numreq,maxCon)
 
