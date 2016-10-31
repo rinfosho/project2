@@ -99,8 +99,8 @@ def attack(url, numreq, maxCon):
     print "Failed requests: ", fail_count
     print "Avg requests per second: ", float(numreq)/tottime," [req/s]"
 
-url = "http://10.27.8.20:8080/"
-numreq = 100000
-maxCon = 20000
+url = "http://10.27.8.20:8080"
+numreq = 100
+maxCon = 20
 attack(url,numreq,maxCon)
 
