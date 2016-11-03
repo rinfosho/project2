@@ -1,0 +1,58 @@
+#!/usr/bin/env python
+#-*- coding: utf-8 -*-
+import sys
+from tornado.curl_httpclient import CurlAsyncHTTPClient
+from tornado.httpclient import HTTPRequest
+from tornado.ioloop import IOLoop
+import collections
+import itertools
+import time
+from urlparse import urlparse
+
+if __name__ == '__main__':
+    numReq = int(sys.argv[2])
+    url = [sys.argv[-1]]*numReq
+    maxConn = int(sys.argv[-2])
+    global completed_request
+    completed_request = collections.Counter()
+
+
+    # CurlAsyncHTTPClient.configure(None, max_clients=nummconn,defaults=dict(connect_timeout=float(10), request_timeout=float(300)))
+times = []
+def handle_request(response):
+    url.pop()
+    if len(url) == 0:
+        IOLoop.instance().stop()
+    start=time.time()
+    # a=response.request_time*1e-1
+    completed_request.update({str(response.code):1})
+    tot = time.time() - start
+    times.append(tot)
+
+http_client = CurlAsyncHTTPClient(None, max_clients=maxConn)
+p2tag = {"P2Tag": "u5780417_u5680607"}
+request = HTTPRequest(url[0],"GET",headers=(p2tag))
+
+startprocess = time.time()
+for num in xrange(numReq):
+    http_client.fetch(request, handle_request)
+IOLoop.instance().start()
+endprocess = time.time()
+overalltime = endprocess - startprocess
+# print "Time Taken for tests: ", sum()
+print "Time taken for tests: ", overalltime, " seconds"
+print "Completed requests: " + str(completed_request["200"])
+print "Failed requests: " + str(numReq - completed_request["200"])
+print "Avg requests per second: ", numReq/overalltime , " [req/s]"
+fifty = sum(times[:len(times)/2])*1000
+sixty = sum(times[:int(len(times)*0.6)])*1000
+seventy = sum(times[:int(len(times)*0.7)])*1000
+eighty = sum(times[:int(len(times)*0.8)])*1000
+ninety = sum(times[:int(len(times)*0.9)])*1000
+print "Percentages of requests served within a certain time (ms)"
+print "50%      ",int(fifty)
+print "60%      ",int(sixty)
+print "70%      ",int(seventy)
+print "80%      ",int(eighty)
+print "90%      ",int(ninety)
+print "100%     ",int(sum(times)*1000), " (longest request)"
