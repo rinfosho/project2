@@ -27,7 +27,7 @@ def getreq(url):
     return ("GET " + "{p} HTTP/1.1" + NL + "Host: {h}" + NL + "P2Tag: {t}" + NL + NL).format(p=path,h=host,t=P2tag)
 
 def attack(url, numreq, maxCon):
-    head=''
+    stat = dict()
     fail_count=0
     #Retrieve the http_request from the function that makes it
     http_request = getreq(url)
@@ -54,48 +54,60 @@ def attack(url, numreq, maxCon):
             try:
                 start=time.time()
                 attack_socket.send(http_request)
+                # head =""
+                # while NL+NL not in head:
+                #     buf = attack_socket.recv(1024)
+                #     head += buf
+                # header_data = head.split(NL + NL)[0]
                 end = time.time()
+                # stat[pass_counter+fail_count+1] = (header_data, end-start)
                 pass_counter+=1
                 tottime += (end-start)
             except (skt.timeout, skt.error):
                 fail_count +=1
             continue
-            while '\r\n\r\n' not in head:
-                buf = attack_socket.recv(1024)
-                head += buf
-            content.append(head)
+            # while '\r\n\r\n' not in head:
+            #     buf = attack_socket.recv(1024)
+            #     head += buf
+            # content.append(head)
             
     if (pass_counter + fail_count) != numreq:
         for k in range((numreq-(pass_counter + fail_count))):
             try:
                 start=time.time()
                 attack_socket.send(http_request)
+                # head =""
+                # while NL+NL not in head:
+                #     buf = attack_socket.recv(1024)
+                #     head += buf
+                # header_data = head.split(NL + NL)[0]
+                # end = time.time()
+                # stat[pass_counter+fail_count+1] = (header_data, end-start)
                 pass_counter+=1
-                end = time.time()
                 tottime += end-start
             except (skt.error, skt.timeout):
                 fail_count+=1
             continue
-            while '\r\n\r\n' not in head:
-                buf = attack_socket.recv(1)
-                head += buf
+            # while '\r\n\r\n' not in head:
+            #     buf = attack_socket.recv(1)
+            #     head += buf
 
-    content_to_load = ""
-    head =""
-    while '\r\n\r\n' not in head:
-        buf = attack_socket.recv(1024)
-        head += buf
-    header_data = head.split("\r\n\r\n")[0]
-    attack_socket.close()
+    # content_to_load = ""
+    # head =""
+    # while '\r\n\r\n' not in head:
+    #     buf = attack_socket.recv(1024)
+    #     head += buf
+    # header_data = head.split("\r\n\r\n")[0]
+    # attack_socket.close()
     # return pass_counter, fail_count, tottime
-    print "Replies from the server: \r\n", header_data + "\r\n\r\n"
     print "Time taken for tests: ", tottime," seconds" 
     print "Completed requests: ", pass_counter
     print "Failed requests: ", fail_count
     print "Avg requests per second: ", float(pass_counter)/tottime," [req/s]"
+    # print "fuck you maiyehowey: ", stat
 
-url = "http://10.27.8.20:8080/"
-numreq = 10000
-maxCon = 2000
+url = "http://lgul.fishcluster.local:9000/fire"
+numreq = 1000
+maxCon = 400 
 attack(url,numreq,maxCon)
 
