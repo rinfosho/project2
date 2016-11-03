@@ -106,7 +106,7 @@ def attack(url, numreq, maxCon):
     print "Avg requests per second: ", float(pass_counter)/tottime," [req/s]"
     # print "fuck you maiyehowey: ", stat
 
-url = "http://lgul.fishcluster.local:9000/fire"
+url = "http://lgu1.fishcluster.local:9000/fire"
 numreq = 1000
 maxCon = 400 
 attack(url,numreq,maxCon)
