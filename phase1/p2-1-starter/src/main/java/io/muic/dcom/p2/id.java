@@ -1,15 +1,15 @@
 package io.muic.dcom.p2;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.*;
 
 /**
  * Created by Don on 11/11/2016 AD.
  */
-public class id {
+public class id implements Runnable{
+    @Override
+    public void run() {
+
+    }
+
     public static class ParcelObserved {
         private String parcelId;
         private String stationId;
@@ -32,25 +32,24 @@ public class id {
         transactions = new HashMap<>();
     }
     public void postObserve(String parcelId, String stationId, long timestamp) {
-        Map <String, Long> temporary = new HashMap<>();
+        Map<String,Long> temporary = new HashMap<>();
         temporary.put(stationId,timestamp);
         transactions.put(parcelId, temporary);
     }
 
-    public Map<String,ArrayList<String>> getParcelTrail(String parcelId) {
-//        return transactions.stream()
-//                .filter(observeEvent -> observeEvent.parcelId.equals(parcelId))
-//                .collect(Collectors.toList());
-        //getParcelTrail finds
-
+    public List<String> getParcelTrail(String parcelId) {
+        List<String> ans = new ArrayList<>();
+        if (transactions.containsKey(parcelId)) {
+            ans.add(transactions.values().iterator().next().keySet().iterator().next());
+        }
+        return ans;
     }
 
     public long getStopCount(String stationId) {
-        return transactions.stream()
-                .filter(observeEvent -> observeEvent.stationId.equals(stationId))
-                .count();
-    }
-
-
+        long count=0;
+        if (transactions.values().iterator().next().containsKey(stationId)){
+            count++;
+        }
+        return count;
     }
 }
