@@ -1,7 +1,9 @@
 package io.muic.dcom.p2;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class DataModel {
@@ -21,26 +23,27 @@ public class DataModel {
         public long getTimeStamp() { return timeStamp; }
     }
 
-    private List<ParcelObserved> transactions;
+    private Map<String,List<ParcelObserved>>  transactions;
 
-    DataModel() {
-        transactions = new ArrayList<>();
+    DataModel(){
+        transactions = new HashMap<>();
     }
-
-    public synchronized void postObserve(String parcelId, String stationId, long timestamp) {
+    public void postObserve(String parcelId, String stationId, long timestamp) {
         ParcelObserved parcelObserved = new ParcelObserved(parcelId, stationId, timestamp);
-        transactions.add(parcelObserved);
+        List<ParcelObserved> temporary = new ArrayList<>();
+        temporary.add(parcelObserved);
+        transactions.put(parcelId, temporary);
     }
 
-    public synchronized List<ParcelObserved> getParcelTrail(String parcelId) {
-        return transactions.stream()
-                .filter(observeEvent -> observeEvent.parcelId.equals(parcelId))
-                .collect(Collectors.toList());
+    public List<ParcelObserved> getParcelTrail(String parcelId) {
+        return (transactions.get(parcelId));
     }
 
-    public synchronized long getStopCount(String stationId) {
-        return transactions.stream()
-                .filter(observeEvent -> observeEvent.stationId.equals(stationId))
-                .count();
+    public long getStopCount(String stationId) {
+        long count=0;
+        if (transactions.values().iterator().next().contains(stationId)){
+            count++;
+        }
+        return count;
     }
 }

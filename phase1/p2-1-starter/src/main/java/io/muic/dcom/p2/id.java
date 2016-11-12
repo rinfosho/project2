@@ -32,6 +32,7 @@ public class id implements Runnable{
         transactions = new HashMap<>();
     }
     public void postObserve(String parcelId, String stationId, long timestamp) {
+        ParcelObserved parcelObserved = new ParcelObserved(parcelId, stationId, timestamp);
         Map<String,Long> temporary = new HashMap<>();
         temporary.put(stationId,timestamp);
         transactions.put(parcelId, temporary);
