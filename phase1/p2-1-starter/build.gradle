@@ -17,6 +17,12 @@ jar {
     manifest {
         attributes 'Main-Class': mainClassName
     }
+
+    from {
+        configurations.compile.collect{
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
 }
 // In this section you declare the dependencies for your production and test code
 dependencies {

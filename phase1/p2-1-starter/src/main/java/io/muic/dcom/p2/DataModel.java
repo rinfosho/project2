@@ -1,9 +1,6 @@
 package io.muic.dcom.p2;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class DataModel {
@@ -23,27 +20,30 @@ public class DataModel {
         public long getTimeStamp() { return timeStamp; }
     }
 
-    private Map<String,List<ParcelObserved>>  transactions;
+    private HashMap<String, HashSet<ParcelObserved>> ParcelMap; //store info about parcles
+    private HashMap<String, Long> StationMap; //stare info about the stations
 
     DataModel(){
-        transactions = new HashMap<>();
+        ParcelMap = new HashMap<>();
+        StationMap = new HashMap<>();
     }
     public void postObserve(String parcelId, String stationId, long timestamp) {
         ParcelObserved parcelObserved = new ParcelObserved(parcelId, stationId, timestamp);
-        List<ParcelObserved> temporary = new ArrayList<>();
+        HashSet<ParcelObserved> temporary = new HashSet<>();
         temporary.add(parcelObserved);
-        transactions.put(parcelId, temporary);
+        ParcelMap.put(parcelId, temporary);
+        StationMap.put(stationId, StationMap.getOrDefault(stationId, 0L)+1L);
+
     }
 
     public List<ParcelObserved> getParcelTrail(String parcelId) {
-        return (transactions.get(parcelId));
+        Set <ParcelObserved> setans =new HashSet<>(ParcelMap.get(parcelId));
+        List<ParcelObserved> listans =new ArrayList<>(setans);
+        return listans;
+        //return (List<ParcelObserved>) ParcelMap.get(parcelId);
     }
 
     public long getStopCount(String stationId) {
-        long count=0;
-        if (transactions.values().iterator().next().contains(stationId)){
-            count++;
-        }
-        return count;
+        return StationMap.getOrDefault(stationId, 0L);
     }
 }

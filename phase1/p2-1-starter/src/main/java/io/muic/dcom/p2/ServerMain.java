@@ -66,8 +66,11 @@ public class ServerMain {
             String parcelId = request.headers("parcelId");
             String stationId = request.headers("stationId");
             String timestampStr = request.headers("timestamp");
+
             Long timestamp = null;
-            try { timestamp = Long.parseLong(timestampStr); }
+            try {
+                timestamp = Long.parseLong(timestampStr);
+            }
             catch (NumberFormatException e) {
                 halt(400, "Invalid timestamp.");
             }
