@@ -37,9 +37,9 @@ public class DataModel {
     }
 
     public List<ParcelObserved> getParcelTrail(String parcelId) {
-        Set <ParcelObserved> setans =new HashSet<>(ParcelMap.get(parcelId));
-        List<ParcelObserved> listans =new ArrayList<>(setans);
-        return listans;
+        Set <ParcelObserved> SetAns =new HashSet<>(ParcelMap.get(parcelId));
+        List<ParcelObserved> ListAns =new ArrayList<>(SetAns);
+        return ListAns;
         //return (List<ParcelObserved>) ParcelMap.get(parcelId);
     }
 
