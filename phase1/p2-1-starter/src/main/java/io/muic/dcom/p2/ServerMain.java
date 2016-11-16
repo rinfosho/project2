@@ -8,7 +8,7 @@ import java.util.List;
 
 public class ServerMain {
     static class Config {
-        public static final int DEFAULT_NUM_THREADS = 6;
+        public static final int DEFAULT_NUM_THREADS = 4;
         public static final int DEFAULT_PORT = 9090;
     }
 
@@ -24,7 +24,7 @@ public class ServerMain {
         post("/events", handlePostObserve(model));
         get("/trail/:parcelId", handleGetParcelTrail(model));
         get("/stopCount/:stationId", handleGetStopCount(model));
-        handlesize(model);//edit
+        //handlesize(model);//edit
     }
 
     private static Route handleGetStopCount(DataModel model) {
@@ -85,7 +85,7 @@ public class ServerMain {
             return "OK";
         };
     }
-    private static int handlesize(DataModel model){//edit
-        return model.sizee();//edit
-    }
+//    private static int handlesize(DataModel model){//edit
+//        return model.sizee();//edit
+//    }
 }

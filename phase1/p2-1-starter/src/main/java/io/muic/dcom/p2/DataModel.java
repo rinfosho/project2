@@ -47,7 +47,7 @@ public class DataModel {
         return StationMap.getOrDefault(stationId, 0L);
     }
 
-    public int sizee(){//edit
-        return this.ParcelMap.size();//edit
-    }
+//    public int sizee(){//edit
+//        return this.ParcelMap.size();//edit
+//    }
 }
