@@ -46,4 +46,8 @@ public class DataModel {
     public synchronized long getStopCount(String stationId) {
         return StationMap.getOrDefault(stationId, 0L);
     }
+
+    public int sizee(){//edit
+        return this.ParcelMap.size();//edit
+    }
 }

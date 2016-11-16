@@ -24,6 +24,7 @@ public class ServerMain {
         post("/events", handlePostObserve(model));
         get("/trail/:parcelId", handleGetParcelTrail(model));
         get("/stopCount/:stationId", handleGetStopCount(model));
+        handlesize(model);//edit
     }
 
     private static Route handleGetStopCount(DataModel model) {
@@ -40,6 +41,7 @@ public class ServerMain {
                 return errorMsg;
             }
         };
+
     }
 
     private static Route handleGetParcelTrail(DataModel model) {
@@ -82,5 +84,8 @@ public class ServerMain {
             } else halt(400);
             return "OK";
         };
+    }
+    private static int handlesize(DataModel model){//edit
+        return model.sizee();//edit
     }
 }
