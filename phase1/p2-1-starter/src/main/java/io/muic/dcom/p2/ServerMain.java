@@ -24,7 +24,6 @@ public class ServerMain {
         post("/events", handlePostObserve(model));
         get("/trail/:parcelId", handleGetParcelTrail(model));
         get("/stopCount/:stationId", handleGetStopCount(model));
-        //handlesize(model);//edit
     }
 
     private static Route handleGetStopCount(DataModel model) {
@@ -41,7 +40,6 @@ public class ServerMain {
                 return errorMsg;
             }
         };
-
     }
 
     private static Route handleGetParcelTrail(DataModel model) {
@@ -51,7 +49,7 @@ public class ServerMain {
                 List<DataModel.ParcelObserved> trail = model.getParcelTrail(parcelId);
                 // order the parcel trail by timestamp from earliest and on
                 trail.sort((eventA, eventB) ->
-                                Long.compare(eventA.getTimeStamp(), eventB.getTimeStamp()));
+                        Long.compare(eventA.getTimeStamp(), eventB.getTimeStamp()));
                 return (new Gson()).toJson(trail);
             }
             else {
@@ -85,7 +83,4 @@ public class ServerMain {
             return "OK";
         };
     }
-//    private static int handlesize(DataModel model){//edit
-//        return model.sizee();//edit
-//    }
 }
