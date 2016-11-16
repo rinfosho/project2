@@ -27,7 +27,7 @@ public class DataModel {
         ParcelMap = new HashMap<>();
         StationMap = new HashMap<>();
     }
-    public void postObserve(String parcelId, String stationId, long timestamp) {
+    public synchronized void postObserve(String parcelId, String stationId, long timestamp) {
         ParcelObserved parcelObserved = new ParcelObserved(parcelId, stationId, timestamp);
         HashSet<ParcelObserved> temporary = new HashSet<>();
         temporary.add(parcelObserved);
@@ -36,14 +36,14 @@ public class DataModel {
 
     }
 
-    public List<ParcelObserved> getParcelTrail(String parcelId) {
+    public synchronized List<ParcelObserved> getParcelTrail(String parcelId) {
         Set <ParcelObserved> SetAns =new HashSet<>(ParcelMap.get(parcelId));
         List<ParcelObserved> ListAns =new ArrayList<>(SetAns);
         return ListAns;
         //return (List<ParcelObserved>) ParcelMap.get(parcelId);
     }
 
-    public long getStopCount(String stationId) {
+    public synchronized long getStopCount(String stationId) {
         return StationMap.getOrDefault(stationId, 0L);
     }
 }
