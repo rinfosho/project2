@@ -4,7 +4,11 @@
 # By Parintr SACHAVIRAWONGSE and Arun BHUSRI 
 #          5780417               5680607
 
-PHASE 0:
+
+
+
+## PHASE 0:
+      
       Attacking and defending a web service
        BEFORE YOU RUN THE CODE:
         -You MUST install the following libraries on your system.
@@ -24,7 +28,9 @@ PHASE 0:
 
         Enjoy the code.
 
-PHASE 1:
+## PHASE 1:
+        
+        
         - To run the program, you must first install gradle and then run gradle installDist
         In order to install gradle, We must first type in the following command into the terminal:
 
