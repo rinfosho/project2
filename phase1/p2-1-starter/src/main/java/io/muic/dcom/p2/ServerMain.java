@@ -9,7 +9,7 @@ import java.util.List;
 public class ServerMain {
     static class Config {
         public static final int DEFAULT_NUM_THREADS = 6;
-        public static final int DEFAULT_PORT = 7331;
+        public static final int DEFAULT_PORT = 7070;
     }
 
     public static void main(String args[]) {
@@ -24,6 +24,8 @@ public class ServerMain {
         post("/events", handlePostObserve(model));
         get("/trail/:parcelId", handleGetParcelTrail(model));
         get("/stopCount/:stationId", handleGetStopCount(model));
+
+
     }
 
     private static Route handleGetStopCount(DataModel model) {
@@ -83,4 +85,5 @@ public class ServerMain {
             return "OK";
         };
     }
+
 }
